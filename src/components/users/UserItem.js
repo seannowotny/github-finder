@@ -1,24 +1,19 @@
 import React, { Component } from 'react';
 
-type UserProps = {};
-
-type UserState = {|
+export type User = {|
   id: number,
   login: string,
   avatar_url: string,
   html_url: string
 |};
 
-class UserItem extends Component<UserProps, UserState> {
-  state = {
-    id: 1,
-    login: 'mojombo',
-    avatar_url: 'https://avatars0.githubusercontent.com/u/1?v=4',
-    html_url: 'https://github.com/mojombo'
-  };
+type UserProps = {
+  user: User
+};
 
+class UserItem extends Component<UserProps> {
   render() {
-    const { login, avatar_url, html_url } = this.state;
+    const { login, avatar_url, html_url } = this.props.user;
 
     return (
       <div className='card text-center'>
