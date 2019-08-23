@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { PropTypes, Component } from 'react';
 
 type Props = {
-  title?: string,
-  icon?: string
+  title: string,
+  icon: string
 };
 
 export class Navbar extends Component<Props> {
