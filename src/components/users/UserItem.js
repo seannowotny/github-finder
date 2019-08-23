@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 type UserProps = {};
 
 type UserState = {|
-  id: string,
+  id: number,
   login: string,
   avatar_url: string,
   html_url: string
@@ -11,7 +11,7 @@ type UserState = {|
 
 class UserItem extends Component<UserProps, UserState> {
   state = {
-    id: 'id',
+    id: 1,
     login: 'mojombo',
     avatar_url: 'https://avatars0.githubusercontent.com/u/1?v=4',
     html_url: 'https://github.com/mojombo'
