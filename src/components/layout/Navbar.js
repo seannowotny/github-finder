@@ -1,25 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 type NavbarProps = {|
   title: string,
   icon: string
 |};
 
-export class Navbar extends Component<NavbarProps> {
-  static defaultProps = {
-    title: 'Github Finder',
-    icon: 'fab fa-github'
-  };
+const Navbar = ({ icon, title }: NavbarProps) => {
+  return (
+    <nav className='navbar bg-primary'>
+      <h1>
+        <i className={icon} /> {title}
+      </h1>
+    </nav>
+  );
+};
 
-  render() {
-    return (
-      <nav className='navbar bg-primary'>
-        <h1>
-          <i className={this.props.icon} /> {this.props.title}
-        </h1>
-      </nav>
-    );
-  }
-}
+Navbar.defaultProps = {
+  title: 'Github Finder',
+  icon: 'fab fa-github'
+};
 
 export default Navbar;
