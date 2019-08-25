@@ -93,6 +93,8 @@ class App extends Component<AppProps, AppState>
   setAlert = (msg: string, type: string) =>
   {
     this.setState({ alert: { msg, type }});
+
+    setTimeout(() => this.setState({ alert: null }), 3000);
   }
 }
 
