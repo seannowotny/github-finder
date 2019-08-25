@@ -1,11 +1,12 @@
 import React from 'react';
+import type { Element } from 'react';
 
 type NavbarProps = {|
   title: string,
   icon: string
 |};
 
-const Navbar = ({ icon, title }: NavbarProps) => {
+const Navbar = ({ icon, title }: NavbarProps): Element<string> => {
   return (
     <nav className='navbar bg-primary'>
       <h1>

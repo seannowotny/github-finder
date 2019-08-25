@@ -1,5 +1,6 @@
 //#region Imports 
 import React, { Component } from 'react';
+import type { Element } from 'react';
 //#endregion /*
 
 //#region Types 
@@ -15,7 +16,9 @@ type TextChangeEvent = {|
 |};
 
 type SearchProps = {|
-  searchUsers: string => Promise<void>
+  searchUsers: string => Promise<void>,
+  clearUsers: () => void,
+  areUsersDisplayed: boolean
 |};
 
 type SubmitEvent = {|
@@ -28,16 +31,18 @@ export class Search extends Component<SearchProps, SearchState> {
     text: ''
   };
 
-  changeText = (e: TextChangeEvent) =>
+  changeText = (e: TextChangeEvent): void =>
     this.setState({ [e.target.name]: e.target.value });
 
-  submitForm = (e: SubmitEvent) => {
+  submitForm = (e: SubmitEvent): void => {
     e.preventDefault();
     this.props.searchUsers(this.state.text);
     this.setState({ text: '' });
   };
 
   render() {
+    const { areUsersDisplayed }: SearchProps = this.props;
+
     return (
       <div>
         <form onSubmit={this.submitForm} className='form'>
@@ -54,9 +59,19 @@ export class Search extends Component<SearchProps, SearchState> {
             className='btn btn-dark btn-block'
           />
         </form>
+        {areUsersDisplayed && 
+          this.clearButton()}
       </div>
     );
   }
+
+  clearButton = (): Element<string> =>
+  {
+    return (
+      <button className="btn btn-light btn-block" 
+        onClick={this.props.clearUsers}>Clear</button>
+    )
+  };
 }
 
 export default Search;

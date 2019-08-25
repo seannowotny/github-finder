@@ -30,17 +30,17 @@ class App extends Component<AppProps, AppState>
 {
   state: AppState = {
     users: [],
-    loading: false
+    loading: true
   }
 
   componentDidMount() 
   {
-    this.setState({ loading: true });
     this.getUsers();
   }
 
   getUsers = async (): any =>
   {
+    this.setState({ loading: true });
     const env: ENV = process.env;
     const url: string = `https://api.github.com/users?client_id=
     ${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=
@@ -52,12 +52,15 @@ class App extends Component<AppProps, AppState>
 
   render() 
   {
+    const { users, loading }: AppState = this.state;
     return (
       <nav className='App'>
         <Navbar />
         <div className='container'>
-          <Search searchUsers={this.searchUsers} />
-          <Users loading={this.state.loading} users={this.state.users} />
+          <Search searchUsers={this.searchUsers} 
+          clearUsers={this.clearUsers} 
+          areUsersDisplayed={users.length > 0 ? true : false} />
+          <Users loading={loading} users={users} />
         </div>
       </nav>
     );
@@ -65,6 +68,7 @@ class App extends Component<AppProps, AppState>
 
   searchUsers = async (text: string): Promise<void> => 
   {
+    this.setState({ loading: true });
     const env: ENV = process.env;
     const url: string = `https://api.github.com/search/users?q=${text}&client_id=
     ${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=
@@ -73,6 +77,8 @@ class App extends Component<AppProps, AppState>
     const res: UsersResponse = await axios.get(url);
     this.setState({ users: res.data.items, loading: false });
   };
+
+  clearUsers = () => this.setState({ users: [], loading: false })
 }
 
 export default App;
