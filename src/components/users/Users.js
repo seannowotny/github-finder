@@ -18,9 +18,19 @@ const Users = ({ users, isLoading }: UserProps) => {
   } else {
     result = (
       <div style={userStyle}>
-        {users.map(user => (
-          <UserItem key={user.id} user={user} />
-        ))}
+        {users.map((user): Element<typeof UserItem> | null => 
+          { 
+            if(user)
+            {
+              const u: $NonMaybeType<User> = user;
+              return (<UserItem key={u.id} user={u} />);
+            }
+            else
+            {
+              return null;
+            }
+          }
+        )}
       </div>
     );
   }

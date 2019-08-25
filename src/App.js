@@ -1,13 +1,13 @@
 //#region Imports 
 import React, { Component, Fragment } from 'react';
-import axios from 'axios';              
-// $FlowFixMe
+import axios from 'axios';             
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Navbar from './components/layout/Navbar';
 import Users from './components/users/Users';
 import Search from './components/users/Search';
 import Alert from './components/layout/Alert';
+import UserWindow from './components/users/UserWindow';
 
 import About from './components/pages/About';
 
@@ -21,9 +21,10 @@ import './App.css';
 //#region Types
 type ENV = { [string]: ?string };
 
-type AppProps = {};
+type AppProps = {||};
 
 type AppState = {|
+  user: User,
   users: Array <User>,
   isLoading: boolean,
   alert: AlertContents
@@ -33,11 +34,16 @@ type UsersResponse = {|
   data: {| items: Array<User> |} & Array<User> 
 |};
 
+type UserResponse = {|
+  data: User
+|};
+
 //#endregion
 
 class App extends Component<AppProps, AppState>
 {
   state: AppState = {
+    user: null,
     users: [],
     isLoading: true,
     alert: null
@@ -60,8 +66,8 @@ class App extends Component<AppProps, AppState>
     this.setState({ users: res.data, isLoading: false });
   };
 
-  render(): Element<string> {
-    const { users, isLoading, alert }: AppState = this.state;
+  render(): Element<any> {
+    const { users, isLoading, alert, user }: AppState = this.state;
     return (
       <Router>
         <div className='App'>
@@ -83,6 +89,16 @@ class App extends Component<AppProps, AppState>
               )} 
               />
               <Route exact path='/about' component={About} />
+
+              <Route exact path='/user/:login'
+              render={props => (
+                <UserWindow 
+                  { ...props } 
+                  getUser={this.getUser} 
+                  user={user} 
+                  isLoading={isLoading} 
+                />
+              )} />
             </Switch>
           </div>
         </div>
@@ -100,6 +116,18 @@ class App extends Component<AppProps, AppState>
 
       const res: UsersResponse = await axios.get(url);
       this.setState({ users: res.data.items, isLoading: false });
+  };
+
+  getUser = async (username: string): Promise<void> =>
+  {
+    this.setState({ isLoading: true });
+    const env: ENV = process.env;
+    const url: string = `https://api.github.com/user/${username}?client_id=
+    ${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=
+    ${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
+
+    const res: UserResponse = await axios.get(url);
+    this.setState({ user: res.data, isLoading: false });
   };
 
   clearUsers = () => this.setState({ users: [], isLoading: false });
