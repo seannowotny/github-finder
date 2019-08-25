@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Element } from 'react';
+// $FlowFixMe
 import { Link } from 'react-router-dom';
 
 type NavbarProps = {|
