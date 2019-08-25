@@ -18,7 +18,8 @@ type TextChangeEvent = {|
 type SearchProps = {|
   searchUsers: string => Promise<void>,
   clearUsers: () => void,
-  areUsersDisplayed: boolean
+  areUsersDisplayed: boolean,
+  setAlert: (string, string) => void
 |};
 
 type SubmitEvent = {|
@@ -36,11 +37,18 @@ export class Search extends Component<SearchProps, SearchState> {
 
   submitForm = (e: SubmitEvent): void => {
     e.preventDefault();
-    this.props.searchUsers(this.state.text);
-    this.setState({ text: '' });
+    if(this.state.text === '')
+    {
+      this.props.setAlert('Please enter something', 'light');
+    }
+    else
+    {
+      this.props.searchUsers(this.state.text);
+      this.setState({ text: '' });
+    }
   };
 
-  render() {
+  render(): Element<string> {
     const { areUsersDisplayed }: SearchProps = this.props;
 
     return (

@@ -1,11 +1,15 @@
 //#region Imports 
 import React, { Component } from 'react';
+import axios from 'axios'; //Not an error
+
 import Navbar from './components/layout/Navbar';
 import Users from './components/users/Users';
 import Search from './components/users/Search';
-import axios from 'axios'; //Not an error
+import Alert from './components/layout/Alert';
 
+import type { Element } from 'react';
 import type { User } from './components/users/UserItem';
+import type { AlertContents } from './components/layout/Alert';
 
 import './App.css';
 //#endregion 
@@ -17,8 +21,9 @@ type AppProps = {};
 
 type AppState = {|
   users: Array <User>,
-  loading: boolean
-|};
+  isLoading: boolean,
+  alert: AlertContents
+|}
 
 type UsersResponse = {|
   data: {| items: Array<User> |} & Array<User> 
@@ -30,7 +35,8 @@ class App extends Component<AppProps, AppState>
 {
   state: AppState = {
     users: [],
-    loading: true
+    isLoading: true,
+    alert: null
   }
 
   componentDidMount() 
@@ -40,45 +46,54 @@ class App extends Component<AppProps, AppState>
 
   getUsers = async (): any =>
   {
-    this.setState({ loading: true });
+    this.setState({ isLoading: true });
     const env: ENV = process.env;
     const url: string = `https://api.github.com/users?client_id=
     ${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=
     ${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
 
     const res: UsersResponse = await axios.get(url);
-    this.setState({ users: res.data, loading: false });
+    this.setState({ users: res.data, isLoading: false });
   };
 
-  render() 
+  render(): Element<string>
   {
-    const { users, loading }: AppState = this.state;
+    const { users, isLoading, alert }: AppState = this.state;
     return (
-      <nav className='App'>
+      <div className='App'>
         <Navbar />
         <div className='container'>
-          <Search searchUsers={this.searchUsers} 
+          <Alert alert={alert} />
+          <Search 
+          searchUsers={this.searchUsers} 
           clearUsers={this.clearUsers} 
-          areUsersDisplayed={users.length > 0 ? true : false} />
-          <Users loading={loading} users={users} />
+          areUsersDisplayed={users.length > 0 ? true : false} 
+          setAlert={this.setAlert}
+          />
+          <Users isLoading={isLoading} users={users} />
         </div>
-      </nav>
+      </div>
     );
   }
 
   searchUsers = async (text: string): Promise<void> => 
   {
-    this.setState({ loading: true });
-    const env: ENV = process.env;
-    const url: string = `https://api.github.com/search/users?q=${text}&client_id=
-    ${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=
-    ${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
+      this.setState({ isLoading: true });
+      const env: ENV = process.env;
+      const url: string = `https://api.github.com/search/users?q=${text}&client_id=
+      ${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=
+      ${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
 
-    const res: UsersResponse = await axios.get(url);
-    this.setState({ users: res.data.items, loading: false });
+      const res: UsersResponse = await axios.get(url);
+      this.setState({ users: res.data.items, isLoading: false });
   };
 
-  clearUsers = () => this.setState({ users: [], loading: false })
+  clearUsers = () => this.setState({ users: [], isLoading: false });
+
+  setAlert = (msg: string, type: string) =>
+  {
+    this.setState({ alert: { msg, type }});
+  }
 }
 
 export default App;

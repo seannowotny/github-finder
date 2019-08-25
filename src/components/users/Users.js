@@ -7,13 +7,13 @@ import type { User } from './UserItem';
 
 type UserProps = {|
   users: Array<User>,
-  loading: boolean
+  isLoading: boolean
 |};
 
-const Users = ({ users, loading }: UserProps) => {
+const Users = ({ users, isLoading }: UserProps) => {
   let result: Element<any>;
 
-  if (loading) {
+  if (isLoading) {
     result = <Spinner />;
   } else {
     result = (
