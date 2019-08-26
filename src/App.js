@@ -7,13 +7,14 @@ import Navbar from './components/layout/Navbar';
 import Users from './components/users/Users';
 import Search from './components/users/Search';
 import Alert from './components/layout/Alert';
-import UserWindow from './components/users/UserWindow';
+import User from './components/users/User';
 
 import About from './components/pages/About';
 
 import type { Element } from 'react';
-import type { User } from './components/users/UserItem';
+import type { UserType } from './components/users/UserItem';
 import type { AlertContents } from './components/layout/Alert';
+import type { Repo } from './components/repos/RepoItem';
 
 import './App.css';
 //#endregion 
@@ -24,18 +25,23 @@ type ENV = { [string]: ?string };
 type AppProps = {||};
 
 type AppState = {|
-  user: User,
-  users: Array <User>,
+  user: UserType,
+  users: Array <UserType>,
   isLoading: boolean,
-  alert: AlertContents
+  alert: AlertContents,
+  repos: Array<Repo>
 |}
 
 type UsersResponse = {|
-  data: {| items: Array<User> |} & Array<User> 
+  data: {| items: Array<UserType> |} & Array<UserType> 
 |};
 
 type UserResponse = {|
-  data: User
+  data: UserType
+|};
+
+type UserReposResponse = {|
+  data: Array<Repo>
 |};
 
 //#endregion
@@ -46,7 +52,8 @@ class App extends Component<AppProps, AppState>
     user: {},
     users: [],
     isLoading: true,
-    alert: null
+    alert: null,
+    repos: []
   }
 
   componentDidMount() 
@@ -65,7 +72,7 @@ class App extends Component<AppProps, AppState>
   };
 
   render(): Element<any> {
-    const { users, isLoading, alert, user }: AppState = this.state;
+    const { users, isLoading, alert, user, repos }: AppState = this.state;
     return (
       <Router>
         <div className='App'>
@@ -90,10 +97,12 @@ class App extends Component<AppProps, AppState>
 
               <Route exact path='/user/:login'
               render={props => (
-                <UserWindow 
+                <User 
                   { ...props } 
                   getUser={this.getUser} 
+                  getUserRepos={this.getUserRepos}
                   user={user} 
+                  repos={repos}
                   isLoading={isLoading} 
                 />
               )} />
@@ -122,6 +131,16 @@ class App extends Component<AppProps, AppState>
 
     const res: UserResponse = await axios.get(url);
     this.setState({ user: res.data, isLoading: false });
+  };
+
+  getUserRepos = async (username: string): Promise<void> =>
+  {
+    this.setState({ isLoading: true });
+    const env: ENV = process.env;
+    const url: string = `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
+
+    const res: UserReposResponse = await axios.get(url);
+    this.setState({ repos: res.data, isLoading: false });
   };
 
   clearUsers = () => this.setState({ users: [], isLoading: false });

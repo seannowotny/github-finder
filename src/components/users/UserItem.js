@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import type { Element } from 'react';
 
-export type User = {
+export type UserType = {
   id: number,
   login: string,
   avatar_url: string,
@@ -11,13 +11,13 @@ export type User = {
 };
 
 type UserProps = {|
-  user: User
+  user: UserType
 |};
 
 const UserItem = ({ user }: UserProps): Element<string> | null => {
   if(user)
   {
-    const { login, avatar_url, html_url }: $NonMaybeType<User> = user;
+    const { login, avatar_url, html_url }: $NonMaybeType<UserType> = user;
     return (
       <div className='card text-center'>
         <img

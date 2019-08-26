@@ -3,10 +3,10 @@ import UserItem from './UserItem';
 import Spinner from '../layout/Spinner';
 
 import type { Element } from 'react';
-import type { User } from './UserItem';
+import type { UserType } from './UserItem';
 
 type UserProps = {|
-  users: Array<User>,
+  users: Array<UserType>,
   isLoading: boolean
 |};
 
@@ -22,7 +22,7 @@ const Users = ({ users, isLoading }: UserProps) => {
           { 
             if(user)
             {
-              const u: $NonMaybeType<User> = user;
+              const u: $NonMaybeType<UserType> = user;
               return (<UserItem key={u.id} user={u} />);
             }
             else

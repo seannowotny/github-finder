@@ -2,8 +2,11 @@ import React, { Fragment, Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import Spinner from '../layout/Spinner';
+import Repos from '../repos/Repos';
 
 import type { Element } from 'react';
+
+import type { Repo } from '../repos/RepoItem';
 
 //#region Types
 type GithubUserData = {|
@@ -22,22 +25,25 @@ type GithubUserData = {|
   company: string
 |};
 
-type UserWindowProps = {|
+type UserProps = {|
   getUser: (string) => Promise<void>,
+  getUserRepos: (string) => Promise<void>,
   match: {|
     params: GithubUserData
   |},
   user: GithubUserData,
-  isLoading: boolean
+  isLoading: boolean,
+  repos: Array<Repo>
 |} | any;
 
-type UserWindowState = {||};
+type UserState = {||};
 //#endregion
 
-export class UserWindow extends Component<UserWindowProps, UserWindowState> {
+export class User extends Component<UserProps, UserState> {
   componentDidMount()
   {
     this.props.getUser(this.props.match.params.login);
+    this.props.getUserRepos(this.props.match.params.login);
   }
 
   render(): Element<typeof Spinner | typeof Fragment> 
@@ -58,7 +64,7 @@ export class UserWindow extends Component<UserWindowProps, UserWindowState> {
       company
     }: GithubUserData = this.props.user;
 
-    const { isLoading }: UserWindowProps = this.props;
+    const { isLoading, repos }: UserProps = this.props;
 
     if(isLoading) return <Spinner />; 
 
@@ -134,9 +140,11 @@ export class UserWindow extends Component<UserWindowProps, UserWindowState> {
             Public Gists: {public_gists}
           </div>
         </div>
+
+        <Repos repos={repos} />
       </Fragment>
     );
   }
 }
 
-export default UserWindow
+export default User
