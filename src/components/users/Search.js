@@ -1,13 +1,9 @@
 //#region Imports 
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import type { Element } from 'react';
 //#endregion /*
 
 //#region Types 
-type SearchState = {
-  text: string
-};
-
 type TextChangeEvent = {|
   target: {|
     name: string,
@@ -27,59 +23,53 @@ type SubmitEvent = {|
 |};
 //#endregion 
 
-export class Search extends Component<SearchProps, SearchState> {
-  state: SearchState = {
-    text: ''
-  };
+const Search = ({ searchUsers, clearUsers, areUsersDisplayed, setAlert }: SearchProps) =>
+{
+  const [text, setText] = useState('');
 
-  changeText = (e: TextChangeEvent): void =>
-    this.setState({ [e.target.name]: e.target.value });
+  const changeText = (e: TextChangeEvent): void => setText(e.target.value);
 
-  submitForm = (e: SubmitEvent): void => {
+  const submitForm = (e: SubmitEvent): void => {
     e.preventDefault();
-    if(this.state.text === '')
+    if(text === '')
     {
-      this.props.setAlert('Please enter something', 'light');
+      setAlert('Please enter something', 'light');
     }
     else
     {
-      this.props.searchUsers(this.state.text);
-      this.setState({ text: '' });
+      searchUsers(text);
+      setText('');
     }
   };
 
-  render(): Element<string> {
-    const { areUsersDisplayed }: SearchProps = this.props;
-
-    return (
-      <div>
-        <form onSubmit={this.submitForm} className='form'>
-          <input
-            type='text'
-            name='text'
-            placeholder='Search Users...'
-            value={this.state.text}
-            onChange={this.changeText}
-          />
-          <input
-            type='submit'
-            value='Search'
-            className='btn btn-dark btn-block'
-          />
-        </form>
-        {areUsersDisplayed && 
-          this.clearButton()}
-      </div>
-    );
-  }
-
-  clearButton = (): Element<string> =>
+  const clearButton = (): Element<string> =>
   {
     return (
       <button className="btn btn-light btn-block" 
-        onClick={this.props.clearUsers}>Clear</button>
+        onClick={clearUsers}>Clear</button>
     )
   };
+
+  return (
+    <div>
+      <form onSubmit={submitForm} className='form'>
+        <input
+          type='text'
+          name='text'
+          placeholder='Search Users...'
+          value={text}
+          onChange={changeText}
+        />
+        <input
+          type='submit'
+          value='Search'
+          className='btn btn-dark btn-block'
+        />
+      </form>
+      {areUsersDisplayed && 
+        clearButton()}
+    </div>
+  );
 }
 
 export default Search;

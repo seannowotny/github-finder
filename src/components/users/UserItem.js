@@ -17,7 +17,7 @@ type UserProps = {|
 const UserItem = ({ user }: UserProps): Element<string> | null => {
   if(user)
   {
-    const { login, avatar_url, html_url }: $NonMaybeType<UserType> = user;
+    const { login, avatar_url }: $NonMaybeType<UserType> = user;
     return (
       <div className='card text-center'>
         <img
