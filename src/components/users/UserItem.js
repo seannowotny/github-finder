@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 
 import type { Element } from 'react';
 
-export type User = ?{|
+export type User = {
   id: number,
   login: string,
   avatar_url: string,
   html_url: string
-|};
+};
 
 type UserProps = {|
   user: User

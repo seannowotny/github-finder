@@ -43,7 +43,7 @@ type UserResponse = {|
 class App extends Component<AppProps, AppState>
 {
   state: AppState = {
-    user: null,
+    user: {},
     users: [],
     isLoading: true,
     alert: null
@@ -58,9 +58,7 @@ class App extends Component<AppProps, AppState>
   {
     this.setState({ isLoading: true });
     const env: ENV = process.env;
-    const url: string = `https://api.github.com/users?client_id=
-    ${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=
-    ${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
+    const url: string = `https://api.github.com/users?client_id=${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
 
     const res: UsersResponse = await axios.get(url);
     this.setState({ users: res.data, isLoading: false });
@@ -110,9 +108,7 @@ class App extends Component<AppProps, AppState>
   {
       this.setState({ isLoading: true });
       const env: ENV = process.env;
-      const url: string = `https://api.github.com/search/users?q=${text}&client_id=
-      ${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=
-      ${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
+      const url: string = `https://api.github.com/search/users?q=${text}&client_id=${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
 
       const res: UsersResponse = await axios.get(url);
       this.setState({ users: res.data.items, isLoading: false });
@@ -122,9 +118,7 @@ class App extends Component<AppProps, AppState>
   {
     this.setState({ isLoading: true });
     const env: ENV = process.env;
-    const url: string = `https://api.github.com/user/${username}?client_id=
-    ${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=
-    ${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
+    const url: string = `https://api.github.com/users/${username}?client_id=${String(env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=${String(env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
 
     const res: UserResponse = await axios.get(url);
     this.setState({ user: res.data, isLoading: false });
