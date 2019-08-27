@@ -9,7 +9,7 @@ import type { Element } from 'react';
 import type { Repo } from '../repos/RepoItem';
 
 //#region Types
-type GithubUserData = {|
+export type GithubUserData = {
   name: string,
   avatar_url: string,
   location: string,
@@ -23,7 +23,7 @@ type GithubUserData = {|
   public_gists: string,
   hirable: string,
   company: string
-|};
+};
 
 type UserProps = {|
   getUser: (string) => Promise<void>,
