@@ -1,15 +1,17 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import Spinner from '../layout/Spinner';
 import Repos from '../repos/Repos';
+import GithubContext from '../../context/github/githubContext';
 
 import type { Element } from 'react';
-
 import type { Repo } from '../repos/RepoItem';
+import type { Context } from '../../context/github/githubContext';
 
 //#region Types
 export type GithubUserData = {
+  id: number,
   name: string,
   avatar_url: string,
   location: string,
@@ -26,20 +28,20 @@ export type GithubUserData = {
 };
 
 type UserProps = {|
-  getUser: (string) => Promise<void>,
   getUserRepos: (string) => Promise<void>,
   match: {|
     params: GithubUserData
   |},
-  user: GithubUserData,
-  isLoading: boolean,
   repos: Array<Repo>
 |} | any;
 //#endregion
 
-const User = ({ user, repos, getUser, getUserRepos, match, isLoading }: UserProps): Element<any> =>
+const User = ({repos, getUserRepos, match}: UserProps): Element<any> =>
 {
+  const { getUser, isLoading, user }: Context = useContext(GithubContext);
+
   useEffect(() => {
+    if(match)
     getUser(match.params.login);
     getUserRepos(match.params.login);
     // eslint-disable-next-line

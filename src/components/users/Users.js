@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import GithubContext from '../../context/github/githubContext';
+
 import UserItem from './UserItem';
 import Spinner from '../layout/Spinner';
 
 import type { Element } from 'react';
-import type { UserType } from './UserItem';
+import type { GithubUserData } from './User';
+import type { Context } from '../../context/github/githubContext';
 
-type UserProps = {|
-  users: Array<UserType>,
-  isLoading: boolean
-|};
+const Users = () => {
+  const { isLoading, users }: Context = useContext(GithubContext);
 
-const Users = ({ users, isLoading }: UserProps) => {
   let result: Element<any>;
 
   if (isLoading) {
@@ -18,19 +18,9 @@ const Users = ({ users, isLoading }: UserProps) => {
   } else {
     result = (
       <div style={userStyle}>
-        {users.map((user): Element<typeof UserItem> | null => 
-          { 
-            if(user)
-            {
-              const u: $NonMaybeType<UserType> = user;
-              return (<UserItem key={u.id} user={u} />);
-            }
-            else
-            {
-              return null;
-            }
-          }
-        )}
+        {users.map((user): Element<typeof UserItem> => (
+            <UserItem key={user.id} user={user} />
+        ))}
       </div>
     );
   }

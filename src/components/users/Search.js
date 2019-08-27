@@ -1,7 +1,10 @@
 //#region Imports 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import type { Element } from 'react';
+import GithubContext from '../../context/github/githubContext';
 //#endregion /*
+
+import type { Context } from '../../context/github/githubContext';
 
 //#region Types 
 type TextChangeEvent = {|
@@ -12,9 +15,6 @@ type TextChangeEvent = {|
 |};
 
 type SearchProps = {|
-  searchUsers: string => Promise<void>,
-  clearUsers: () => void,
-  areUsersDisplayed: boolean,
   setAlert: (string, string) => void
 |};
 
@@ -23,8 +23,10 @@ type SubmitEvent = {|
 |};
 //#endregion 
 
-const Search = ({ searchUsers, clearUsers, areUsersDisplayed, setAlert }: SearchProps) =>
+const Search = ({ setAlert }: SearchProps) =>
 {
+  const { users, searchUsers, clearUsers }: Context = useContext(GithubContext);
+
   const [text, setText] = useState('');
 
   const changeText = (e: TextChangeEvent): void => setText(e.target.value);
@@ -66,7 +68,7 @@ const Search = ({ searchUsers, clearUsers, areUsersDisplayed, setAlert }: Search
           className='btn btn-dark btn-block'
         />
       </form>
-      {areUsersDisplayed && 
+      {users.length > 0 && 
         clearButton()}
     </div>
   );
