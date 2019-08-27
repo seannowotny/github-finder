@@ -5,7 +5,6 @@ import UserItem from './UserItem';
 import Spinner from '../layout/Spinner';
 
 import type { Element } from 'react';
-import type { GithubUserData } from './User';
 import type { Context } from '../../context/github/githubContext';
 
 const Users = () => {
