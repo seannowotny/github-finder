@@ -8,10 +8,10 @@ import { SEARCH_USERS,
   GET_USERS } from '../types';
 
 import type { State } from './GithubState';
-import type { Type } from '../types';
+import type { GithubType } from '../types';
 
 export type ActionType = {
-  type: Type;
+  type: GithubType;
   payload: any
 }
 

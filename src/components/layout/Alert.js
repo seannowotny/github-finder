@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
+
+import AlertContext from '../../context/alert/alertContext';
 
 import type { Element } from 'react';
 
@@ -7,11 +9,13 @@ export type AlertContents = ?{|
   type: string
 |} 
 
-type AlertProps = {|
+export type AlertType = {|
   alert: AlertContents
 |}
 
-const Alert = ({ alert }: AlertProps): null | Element<string> => {
+const Alert = (): null | Element<string> => {
+  const { alert }: AlertType = useContext(AlertContext);
+
   if(alert)
   {
     const {type, msg}: $NonMaybeType<AlertContents> = alert;

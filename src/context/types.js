@@ -7,10 +7,14 @@ export const SET_ALERT: string = 'SET_ALERT';
 export const REMOVE_ALERT: string = 'REMOVE_ALERT';
 export const GET_USERS: string = 'GET_USERS';
 
-export type Type = 
+export type GithubType = 
 'SEARCH_USERS' |
 'SET_IS_LOADING'| 
 'CLEAR_USERS'| 
 'GET_USER' | 
 'GET_REPOS' |
 'GET_USERS';
+
+export type AlertType =
+'SET_ALERT' |
+'REMOVE_ALERT';
