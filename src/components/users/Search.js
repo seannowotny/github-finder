@@ -1,7 +1,11 @@
 //#region Imports 
 import React, { useState, useContext } from 'react';
-import type { Element } from 'react';
 import GithubContext from '../../context/github/githubContext';
+import AlertContext from '../../context/alert/alertContext';
+
+import type { Element } from 'react';
+
+import type { AlertType } from '../layout/Alert';
 //#endregion /*
 
 import type { Context } from '../../context/github/githubContext';
@@ -14,18 +18,15 @@ type TextChangeEvent = {|
   |}
 |};
 
-type SearchProps = {|
-  setAlert: (string, string) => void
-|};
-
 type SubmitEvent = {|
   preventDefault: () => void
 |};
 //#endregion 
 
-const Search = ({ setAlert }: SearchProps) =>
+const Search = () =>
 {
   const { users, searchUsers, clearUsers }: Context = useContext(GithubContext);
+  const alertContext = useContext(AlertContext);
 
   const [text, setText] = useState('');
 
@@ -35,7 +36,7 @@ const Search = ({ setAlert }: SearchProps) =>
     e.preventDefault();
     if(text === '')
     {
-      setAlert('Please enter something', 'light');
+      alertContext.setAlert('Please enter something', 'light');
     }
     else
     {

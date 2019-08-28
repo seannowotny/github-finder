@@ -31,6 +31,7 @@ export type State = {|
 export type SearchUsersType = { (string): Promise<void> };
 export type ClearUsersType = { (): Promise<void> };
 export type GetGithubUserData = { (string): Promise<void> };
+export type GetUserReposType = { (string): Promise<void>  };
 
 type Props = {|
   children: any
@@ -42,6 +43,10 @@ type UsersResponse = {|
 
 type UserResponse = {|
   data: GithubUserData
+|};
+
+type UserReposResponse = {|
+  data: Array<Repo>
 |};
 //#endregion
 
@@ -103,6 +108,18 @@ const GithubState = (props: Props) => {
   };
 
   // Get Repos
+  const getUserRepos = async (username: string): Promise<void> =>
+  {
+    setIsLoading();
+    const url: string = `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${String(process.env.REACT_APP_GITHUB_CLIENT_ID)}&client_secret=${String(process.env.REACT_APP_GITHUB_CLIENT_SECRET)}`;
+
+    const res: UserReposResponse = await axios.get(url);
+
+    dispatch({
+      type: GET_REPOS,
+      payload: res.data
+    })
+  };
 
   // Clear Users
   const clearUsers = () => dispatch({ type: CLEAR_USERS });
@@ -118,7 +135,8 @@ const GithubState = (props: Props) => {
       isLoading: state.isLoading,
       searchUsers,
       clearUsers,
-      getUser
+      getUser,
+      getUserRepos
     }}
   >
     {props.children}

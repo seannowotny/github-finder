@@ -5,6 +5,7 @@ import type { Repo } from '../../components/repos/RepoItem';
 import type { SearchUsersType } from './GithubState';
 import type { ClearUsersType } from './GithubState';
 import type { GetGithubUserData } from './GithubState';
+import type { GetUserReposType } from './GithubState';
 
 export type Context = {|
   users: Array<GithubUserData>,
@@ -13,7 +14,8 @@ export type Context = {|
   isLoading: boolean,
   searchUsers: SearchUsersType,
   clearUsers: ClearUsersType,
-  getUser: GetGithubUserData
+  getUser: GetGithubUserData,
+  getUserRepos: GetUserReposType
 |};
 
 //$FlowFixMe

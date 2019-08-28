@@ -36,9 +36,9 @@ type UserProps = {|
 |} | any;
 //#endregion
 
-const User = ({repos, getUserRepos, match}: UserProps): Element<any> =>
+const User = ({ match }: UserProps): Element<any> =>
 {
-  const { getUser, isLoading, user }: Context = useContext(GithubContext);
+  const { getUser, isLoading, user, repos, getUserRepos }: Context = useContext(GithubContext);
 
   useEffect(() => {
     if(match)
