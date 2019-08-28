@@ -10,8 +10,6 @@ import { SEARCH_USERS,
   CLEAR_USERS,
   GET_REPOS,
   SET_IS_LOADING,
-  SET_ALERT,
-  REMOVE_ALERT,
   GET_USERS } from '../types';
 
 import type { GithubUserData } from '../../components/users/User';
