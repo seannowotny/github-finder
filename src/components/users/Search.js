@@ -4,8 +4,6 @@ import GithubContext from '../../context/github/githubContext';
 import AlertContext from '../../context/alert/alertContext';
 
 import type { Element } from 'react';
-
-import type { AlertType } from '../layout/Alert';
 //#endregion /*
 
 import type { Context } from '../../context/github/githubContext';
